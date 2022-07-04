@@ -1,0 +1,11 @@
+# Module: system
+# Docs: https://www.elastic.co/guide/en/beats/metricbeat/7.16/metricbeat-module-system.html
+
+- module: system
+  period: 1m
+  metricsets:
+    - cpu
+    - memory
+  process.include_top_n:
+    by_cpu: 5      # include top 5 processes by CPU
+    by_memory: 5   # include top 5 processes by memory

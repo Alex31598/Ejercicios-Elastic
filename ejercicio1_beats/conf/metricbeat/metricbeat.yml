@@ -1,0 +1,12 @@
+metricbeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: true #SEGUNDO cAMBIO
+
+processors:
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+
+#PRIMER CAMBIO
+output.file:
+  path: "/data"
+  filename: metricbeat.json

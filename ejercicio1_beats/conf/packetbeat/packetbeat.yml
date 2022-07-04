@@ -1,0 +1,22 @@
+packetbeat.interfaces.device: any #SEGUNDO CAMBIO
+packetbeat.interfaces.snaplen: 1514
+packetbeat.interfaces.type: af_packet
+packetbeat.interfaces.buffer_size_mb: 100
+packetbeat.ignore_outgoing: false
+
+#TERCER CAMBIO
+
+packetbeat.protocols:
+- type: http
+  ports: [80]
+  processors:
+  - drop_event:
+      when:
+        not:
+          equals:
+            http.metadata.method: "get"
+
+#PRIMER CAMBIO
+output.file:
+  path: "/data"
+  filename: packetbeat.json

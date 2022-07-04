@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+  dockertutorial:
+    image: docker/getting-started
+    container_name: "dockertutorial"
+    hostname: "dockertutorial"
+    ports:
+      - 80:80
+  packetbeat:
+    image: docker.elastic.co/beats/packetbeat:7.16.3
+    hostname: "packetbeat"
+    container_name: "packetbeat"
+    user: root
+    volumes:
+      - ./data:/data
+      - ./conf/packetbeat/packetbeat.yml:/usr/share/packetbeat/packetbeat.yml
+    cap_add: ['NET_RAW', 'NET_ADMIN']
+    command: ["--strict.perms=false"]
+    network_mode: "host"
+  heartbeat:
+    image: docker.elastic.co/beats/heartbeat:7.16.3
+    hostname: "heartbeat"
+    container_name: "heartbeat"
+    user: root
+    command: heartbeat -e -strict.perms=false
+    volumes:
+      - ./data:/data
+      - ./conf/heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
+  metricbeat:
+    container_name: metricbeat
+    hostname: metricbeat
+    user: root #To read the docker socket
+    image: docker.elastic.co/beats/metricbeat:7.16.3
+    volumes:
+      - ./data:/data
+      - ./conf/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
+      - ./conf/metricbeat/modules.d/:/usr/share/metricbeat/modules.d/
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: metricbeat -e -system.hostfs=/hostfs -strict.perms=false
